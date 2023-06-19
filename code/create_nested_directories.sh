@@ -1,7 +1,7 @@
 #!/bin/bash
 
-base_directory="/scratch/a/arisvoin/clarasun/SCanD_project_PNC/data/local/bids"
-parent_directory="/scratch/a/arisvoin/clarasun/SCanD_project_PNC/data/local/bids/sub-*"
+# base_directory="/scratch/a/arisvoin/clarasun/SCanD_project_PNC/data/local/bids"
+parent_directory="/scratch/a/arisvoin/clarasun/SCanD_project_PNC/data/local/bids/sub-606855754171"
 
 for parent_directory in base_directory
 do
