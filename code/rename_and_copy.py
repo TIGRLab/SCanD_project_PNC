@@ -13,7 +13,7 @@ def rename_and_copy_files(source_dir, destination_pattern):
             source_path = os.path.join(root, filename)
 
             # Check if the file matches the specified criteria
-            if "DTI2x3235" in filename:
+            if "DTI2x3235" in filename: #instead look for "001.nii.gz" - results in two answers and sort the list then assign to run 1 and 2
                 new_filename = f"sub-{destination_pattern}_run-1_dwi{os.path.splitext(filename)[1]}"
             elif "DTI2x3236" in filename:
                 new_filename = f"sub-{destination_pattern}_run-2_dwi{os.path.splitext(filename)[1]}"
