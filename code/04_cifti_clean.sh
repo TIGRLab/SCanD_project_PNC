@@ -44,7 +44,8 @@ export DERIVED_DIR=${BASEDIR}/data/local
 
 # mkdir -vp ${OUTPUT_DIR} ${WORK_DIR} ${LOGS_DIR} # ${LOCAL_FREESURFER_DIR}
 
-fmriprep_folder=${DERIVED_DIR}/fmriprep
+fmriprep_folder=${DERIVED_DIR}/fmriprep/fmriprep # use this path for fmriprep versions >= 20.2
+# fmriprep_folder=${DERIVED_DIR}/fmriprep
 ciftify_folder=${DERIVED_DIR}/ciftify
 
 ## get the subject list from a combo of the array id, the participants.tsv and the chunk size
