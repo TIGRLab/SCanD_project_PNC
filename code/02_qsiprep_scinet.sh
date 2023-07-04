@@ -29,7 +29,8 @@ function cleanup_ramdisk {
 trap "cleanup_ramdisk" TERM
 
 # input is BIDS_DIR this is where the data downloaded from openneuro went
-export BIDS_DIR=${BASEDIR}/data/local/bids
+export BIDS_DIR=${BASEDIR}/data/local/bids_copy
+# export BIDS_DIR=${BASEDIR}/data/local/bids
 
 ## these folders envs need to be set up for this script to run properly 
 ## see notebooks/00_setting_up_envs.md for the set up instructions
@@ -55,11 +56,11 @@ export SINGULARITYENV_FS_LICENSE=/home/qsiprep/.freesurfer.txt
 
 singularity run --cleanenv \
     -B ${BASEDIR}/templates:/home/qsiprep --home /home/qsiprep \
-    -B ${BIDS_DIR}:/bids \
+    -B ${BIDS_DIR}:/bids_copy \
     -B ${OUTPUT_DIR}:/derived \
     -B ${WORK_DIR}:/work \
     ${SING_CONTAINER} \
-    /bids /derived participant \
+    /bids_copy /derived participant \
     --participant_label ${SUBJECTS} \
     -w /work \
     --skip-bids-validation \
