@@ -64,6 +64,7 @@ singularity run --cleanenv \
     --participant_label ${SUBJECTS} \
     -w /work \
     --skip-bids-validation \
+    --dwi-only \
     --omp-nthreads 8 \
     --nthreads 40 \
     --mem-mb 15000 \
