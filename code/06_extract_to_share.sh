@@ -9,7 +9,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PROJECT_DIR=$(dirname "${SCRIPT_DIR}")
 
 FMRIPREP_SHARE_DIR=${PROJECT_DIR}/data/share/fmriprep
-# FMRIPREP_LOCAL_DIR=${PROJECT_DIR}/data/local/fmriprep/
+FMRIPREP_LOCAL_DIR=${PROJECT_DIR}/data/local/fmriprep
 # FMRIPREP_LOCAL_DIR=${PROJECT_DIR}/data/local/fmriprep/fmriprep/ # use with fmriprep version >= 20.2 # moved freesurfer and fmriprep back up to local
 
 mkdir -p ${FMRIPREP_SHARE_DIR}
