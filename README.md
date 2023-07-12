@@ -48,7 +48,8 @@ Currently this repo is going to be set up for running things on SciNet Niagara c
 5. Run fmriprep
 6. Run ciftify
 7.  Run ciftify_clean and parcellate
-8.  Run the scripts to extract sharable data into the sharable folder 
+8.  Run the scripts to extract sharable data into the sharable folder
+9.  A script for NODDI is included in the code but this will not run on the PNC dataset because it was collected using a single shell.
 
 ## Organize your data into BIDS
 
