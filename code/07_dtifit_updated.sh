@@ -85,7 +85,7 @@ singularity exec \
   --recon-only \
   --recon-spec reorient_fslstd \
   --recon-input /qsiprep_in \
-  --output-resolution ${OUTPUT_RESOLUTION} \
+  --output-resolution 2.0 \
   --fs-license-file /li \
   -w /work \
   --notrack
