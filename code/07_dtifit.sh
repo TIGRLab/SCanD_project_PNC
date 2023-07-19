@@ -6,48 +6,51 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem-per-cpu=4096
 #SBATCH --time=2:00:00
-#SBATCH --job-name enigmaDTI
-#SBATCH --output=enigmaDTI_%j.out
-#SBATCH --error=enigmaDTI_%j.err
+#SBATCH --job-name SCanD_project_PNC
+#SBATCH --output=SCanD_project_PNC_%j.out
+#SBATCH --error=SCanD_project_PNC_%j.err
 
 # these kimel lab modules are required
 module load R FSL ENIGMA-DTI/2015.01
 module load ciftify
 
 # the project name
-STUDY="TAY"
+STUDY="SCanD_project_PNC"
 
 # the BIDS session id
 session="ses-01"
 
+# the BIDS run
+run="run-1" # change this to run-2 the second time running
+
 # for QSIPREP output resolution - set this to the resolution of the input files
-OUTPUT_RESOLUTION="1.7"
+OUTPUT_RESOLUTION="2.0"
 
 # set this to the location of the QSIPREP container
 SING_CONTAINER=/archive/code/containers/QSIPREP/pennbbl_qsiprep_0.16.0RC3-2022-06-03-9c3b9f2e4ac1.simg
 
-# set this to the local locaton of the ENIGMA_DTI_BIDS repo
-CODE_DIR=/scratch/edickie/TAY_enigmaDTI/ENIGMA_DTI_BIDS
+# set this to the local locaton of the SCanD_project_PNC repo
+CODE_DIR=${PWD}
 
 ## set this to the original BIDS dataset location
-BIDS_DIR=/archive/data/${STUDY}/data/bids
+BIDS_DIR=${CODE_DIR}/data/local/bids_copy
 
 ## set this to the QSIPREP outputs location
-QSIPREP_DIR=/archive/data/${STUDY}/pipelines/in_progress/baseline/qsiprep
+QSIPREP_DIR=${CODE_DIR}/data/local/qsiprep
 
 ## any tempdir and workdir location will do
-TMP_DIR=/scratch/edickie/TAY_enigmaDTI/tmp
-WORK_DIR=${TMP_DIR}/${STUDY}/qsiprep_work
+TMP_DIR=${CODE_DIR}/data/local/temp_PNC
+WORK_DIR=${TMP_DIR}/qsiprep_work
 
 # set this to the location of a freesurfer license
 FS_LICENSE=${TMP_DIR}/freesurfer_license/license.txt
 
 # set this to the location to write the outputs to
-OUT_DIR=/scratch/edickie/TAY_enigmaDTI/data
+OUT_DIR=${CODE_DIR}/data/local/dtifit
 
 mkdir -p $WORK_DIR $OUT_DIR
 
-THIS_DWI=`ls -1d ${QSIPREP_DIR}/sub-*/ses-01/dwi/*desc-preproc_dwi.nii.gz | head -n ${SLURM_ARRAY_TASK_ID} | tail -n 1`
+THIS_DWI=`ls -1d ${QSIPREP_DIR}/sub-*/dwi/*run-1*desc-preproc_dwi.nii.gz | head -n ${SLURM_ARRAY_TASK_ID} | tail -n 1`
 subject=$(basename $(dirname $(dirname $(dirname ${THIS_DWI}))))
 subject_id=$(echo $subject | sed 's/sub-//g')
 
@@ -76,7 +79,7 @@ singularity exec \
 ######### STEP 2 - running DTIFIT - with BIDS names ##########################
 
 QSIRECON_OUT=${OUT_DIR}/qsirecon/sub-${subject_id}/dwi/sub-${subject_id}_${session}_space-T1w_desc-preproc_fslstd
-DTIFIT_OUT=${OUT_DIR}/dtifit/sub-${subject_id}/ses-01/dwi/sub-${subject_id}_${session}_space-T1w_desc-dtifit
+DTIFIT_OUT=${OUT_DIR}/dtifit/sub-${subject_id}/dwi/sub-${subject_id}_${session}_space-T1w_desc-dtifit
 
 mkdir -p $(dirname ${DTIFIT_OUT})
 
