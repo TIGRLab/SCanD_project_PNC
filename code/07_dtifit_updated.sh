@@ -70,7 +70,7 @@ for sub_dwi in $SUB_DWIS; do
   run="$(cut -d'_' -f2 <<< $base)"
   ##### STEP 1 - if not done - qsiprep fslstd step ###################
 
-singularity exec \
+singularity run \
   -H ${TMP_DIR} \
   -B ${BIDS_DIR}:/bids \
   -B ${QSIPREP_DIR}:/qsiprep_in \
@@ -92,17 +92,25 @@ singularity exec \
 
 ######### STEP 2 - running DTIFIT - with BIDS names ##########################
 
-QSIRECON_OUT=${OUT_DIR}/qsirecon/sub-${subject_id}/dwi/sub-${subject_id}_${run}_space-T1w_desc-preproc_fslstd
-DTIFIT_OUT=${OUT_DIR}/dtifit/sub-${subject_id}/dwi/sub-${subject_id}_${run}_space-T1w_desc-dtifit
+QSIRECON_OUT=/out/qsirecon/sub-${subject_id}/dwi/sub-${subject_id}_${run}_space-T1w_desc-preproc_fslstd
+DTIFIT_OUT=dtifit/sub-${subject_id}/dwi/sub-${subject_id}_${run}_space-T1w_desc-dtifit
 
-mkdir -p $(dirname ${DTIFIT_OUT})
+mkdir -p $(dirname /${OUT_DIR}/${DTIFIT_OUT})
 
+singularity exec \
+  -H ${TMP_DIR} \
+  -B ${BIDS_DIR}:/bids \
+  -B ${QSIPREP_DIR}:/qsiprep_in \
+  -B ${OUT_DIR}:/out \
+  -B ${WORK_DIR}:/work \
+  -B ${FS_LICENSE}:/li \
+  ${SING_CONTAINER} \
 dtifit -k ${QSIRECON_OUT}_dwi.nii.gz \
   -m ${QSIRECON_OUT}_mask.nii.gz \
   -r ${QSIRECON_OUT}_dwi.bvec \
   -b ${QSIRECON_OUT}_dwi.bval \
   --save_tensor --sse \
-  -o ${DTIFIT_OUT}
+  -o /out/${DTIFIT_OUT}
 
 ##### STEP 3 - run the ENIGMA DTI participant workflow ########################
 
