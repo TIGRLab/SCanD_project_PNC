@@ -61,12 +61,12 @@ FS_LICENSE=${TMP_DIR}/freesurfer_license/license.txt
 # set this to the location to write the outputs to
 OUT_DIR=${CODE_DIR}/data/local/
 
-SUB_DWIS=`ls -1d ${QSIPREP_DIR}/${SUBJECTS}/dwi/*desc-preproc_dwi.nii.gz`
+SUB_DWIS=`ls -1d ${QSIPREP_DIR}/sub-${SUBJECTS}/dwi/*desc-preproc_dwi.nii.gz`
 for sub_dwi in $SUB_DWIS; do
   echo $sub_dwi
   base=$(basename ${sub_dwi})
-  subject="$(cut -d'_' -f1 <<< $base)"
-  subject_id=$(echo $subject | sed 's/sub-//g')
+  subject=$(cut -d'_' -f1 <<< $base)
+  # subject_id=$(echo $subject | sed 's/sub-//g') # skip this because qsiprep dwi files start with sub- prefix
   run="$(cut -d'_' -f2 <<< $base)"
   ##### STEP 1 - if not done - qsiprep fslstd step ###################
 
