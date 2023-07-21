@@ -3,10 +3,10 @@
 #SBATCH --output=logs/%x_%j.out 
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=40
-#SBATCH --time=4:00:00
+#SBATCH --time=20:00:00
 
 
-SUB_SIZE=2 ## number of subjects to run is 1 because there are multiple tasks/run that will run in parallel 
+SUB_SIZE=1 ## number of subjects to run is 1 because there are multiple tasks/runs that will run in parallel 
 CORES=40
 export THREADS_PER_COMMAND=2
 
@@ -67,7 +67,6 @@ singularity run --cleanenv \
     --omp-nthreads 8 \
     --nthreads 40 \
     --mem-mb 15000 \
-    --dwi-only \
     --denoise-method dwidenoise \
     --unringing-method mrdegibbs \
     --hmc_model eddy \
