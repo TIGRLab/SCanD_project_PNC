@@ -41,14 +41,15 @@ export OUTPUT_DIR=${BASEDIR}/data/local/fmriprep  # use if version of fmriprep >
 # export OUTPUT_DIR=${BASEDIR}/data/local/ # use if version of fmriprep <=20.1
 
 # export LOCAL_FREESURFER_DIR=${SCRATCH}/${STUDY}/data/derived/freesurfer-6.0.1
-export WORK_DIR=${BBUFFER}/SCanD/fmriprep
+# export WORK_DIR=${BBUFFER}/SCanD/fmriprep # original WORK_DIR
+export WORK_DIR=${BBUFFER}/SCanD/1fmriprep # temporarily change work directory so that all fmriprep outputs will be regenerated
 export LOGS_DIR=${BASEDIR}/logs
 mkdir -vp ${OUTPUT_DIR} ${WORK_DIR} # ${LOCAL_FREESURFER_DIR}
 
 ## get the subject list from a combo of the array id, the participants.tsv and the chunk size
 bigger_bit=`echo "($SLURM_ARRAY_TASK_ID + 1) * ${SUB_SIZE}" | bc`
-SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}`
-
+# SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}`
+SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/no_qc_fmri.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}` # updated 
 ## set singularity environment variables that will point to the freesurfer license and the templateflow bits
 # Make sure FS_LICENSE is defined in the container.
 export SINGULARITYENV_FS_LICENSE=/home/fmriprep/.freesurfer.txt
