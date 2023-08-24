@@ -78,6 +78,8 @@ singularity run --cleanenv \
     --output-space anat MNI152NLin2009cAsym:res-2 \
     --notrack \
     --anat-only
+    --bids-database-dir /bids/pybids
+    
 
 exitcode=$?
 
