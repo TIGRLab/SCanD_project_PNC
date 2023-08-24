@@ -6,7 +6,7 @@
 #SBATCH --time=18:00:00
 
 
-SUB_SIZE=3 ## number of subjects to run
+SUB_SIZE=1 ## number of subjects to run
 CORES=40
 export THREADS_PER_COMMAND=2
 
@@ -48,8 +48,8 @@ mkdir -vp ${OUTPUT_DIR} ${WORK_DIR} # ${LOCAL_FREESURFER_DIR}
 
 ## get the subject list from a combo of the array id, the participants.tsv and the chunk size
 bigger_bit=`echo "($SLURM_ARRAY_TASK_ID + 1) * ${SUB_SIZE}" | bc`
-SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/missing_anat.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}` # participants with incomplete anat
-# SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}`
+# SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/missing_anat.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}` # participants with incomplete anat
+SUBJECTS=`sed -n -E "s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv | head -n ${bigger_bit} | tail -n ${SUB_SIZE}`
 
 ## set singularity environment variables that will point to the freesurfer license and the templateflow bits
 # export SINGULARITYENV_TEMPLATEFLOW_HOME=/home/fmriprep/.cache/templateflow
@@ -78,7 +78,6 @@ singularity run --cleanenv \
     --output-space anat MNI152NLin2009cAsym:res-2 \
     --notrack \
     --anat-only
-    --bids-database-dir /bids/pybids
 
 exitcode=$?
 
