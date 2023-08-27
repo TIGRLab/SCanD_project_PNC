@@ -75,7 +75,7 @@ singularity run --cleanenv \
     --omp-nthreads 8 \
     --nthreads 40 \
     --mem-mb 15000 \
-    --output-space anat MNI152NLin2009cAsym:res-2 \
+    --output-spaces MNI152NLin6Asym:res-2 MNI152NLin2009cAsym:res-2 \
     --notrack \
     --anat-only \
     --bids-database-dir /bids/pybids
