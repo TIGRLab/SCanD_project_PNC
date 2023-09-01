@@ -67,6 +67,7 @@ parallel -j 8 "singularity run --cleanenv \
       /bids /derived participant \
       --participant_label={} \
       --read-from-derivatives /derived \
+      --skip-bids-validation \
       --fs-license ${SINGULARITYENV_FS_LICENSE} \
       --n_cpus 10" \
       --rerun-if-incomplete \
