@@ -1,10 +1,10 @@
 import os
 
-# Directory containing the extracted SVG files
-svg_directory = "/Users/clarasun/OneDrive - The University of Western Ontario/SURP/04_PNC/share/fmriprep/extracted_svgs"
+# Directory containing the extracted SVG files 
+svg_directory = "/Users/*/share/fmriprep/extracted_svgs" # Change this to local path where the extracted svgs are stored
 
 # Number of SVGs per HTML file
-svgs_per_file = 50 # the smaller this number, the faster the html page will load
+svgs_per_file = 50 # the smaller this number, the faster the html page will load; avoid exceeding 100 (too many files per html page causes the html page to not load)
 
 # Create a directory to store the split HTML files
 split_html_directory = "split_html_files"
