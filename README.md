@@ -324,3 +324,61 @@ datalad clone https://github.com/OpenNeuroDerivatives/ds000115-mriqc.git mriqc
 ```
 
 getting the data files we actually use for downstream ciftify things
+
+# Helper Scripts
+The “helper” subdirectory within the code directory contains scripts that were created to assist with various preprocessing steps. Specifically, several scripts were used to bids format diffusion weighted imaging (DWI) data, others scripts track the completion of pipeline steps, and several assist with performing quality control on fMRIprep derivatives. These categories of scripts are described in more detail below. Before running these scripts, double check all paths (i.e., base/source directory and destination paths where applicable). Many of these paths are currently hardcoded to a specific directory. Any destination paths should be changed to the user’s desired path.
+
+## Where should the scripts be run and in what order?
+- Jupyter notebooks (.ipynb) were created with the intention of running on SciNet
+- Bash shell scripts (.sh) can be run in a terminal on SciNet or local terminal, depending on where input/output files are located
+- Python scripts (.py) were created to run on the user’s local terminal (assuming inputs were saved to local terminal) but can be modified to run on SciNet
+- Some of the scripts start with a number to indicate the relative order they should be run in; others have no numbers and can be run independently (stand alone) 
+
+### Note: all helper scripts were added to the `fmriprep_lts` branch of `/ScanD_project_PNC` GitHub repository
+
+## Scripts for bids formatting DWI 
+
+#### Located in `/SCanD_project_PNC/code/helper/bids_format_dwi/`
+
+#### `01_create_nested_directories.sh`
+Creates a nested `dwi_temp` folder within each participant’s bids folder.
+
+#### `02_rename_and_copy.py`
+Run this script after nested “dwi” folders have been created (i.e., after running `create_nested_directories.sh`). This script renames raw diffusion tensor imaging (DTI) data and metadata into the required bids format, then copies this data into each participant’s nested DWI folder in their bids folder. 
+
+#### `03_remove_nested_directories.sh`
+Removes the `dwi_temp` folder created by `create_nested_directories.sh`. Script can be customized by replacing `dwi_temp` with a desired nested folder name, to iterate through and delete all instances of this folder.
+
+#### `PNC_dwi_bids.sh`
+This is an older version of the `rename_and_copy.py` script created for testing purposes. Not intended to be run but can be a reference for code snippets from the bids starter kit tutorial. 
+
+## Scripts for tracking pipeline completion
+
+#### Located in `/SCanD_project_PNC/code/helper/track_pipeline_completion/`
+
+#### count_missing_files.ipynb
+Script that tracks the completion of pipeline steps by comparing a count of output files that exist to the expected number. Uses `os` module to check if paths exist. Includes sections for checking fMRIprep `anat` and `func` derivatives, ciftify and ciftify `qc_fmri` derivatives, bids `func` data, `cifti_clean` derivatives, `parcellate` derivatives, and missing `qsiprep` outputs. Run within /local/bids folder, create a copy of this notebook to your bids folder if needed.
+ 
+#### remove_and_copy_fmriprep.ipynb
+Script is used to delete subject folders that are in both `/fmriprep` and `/fmriprep/fmriprep`, 
+where the version of the subject folder in `/fmriprep` has incomplete `anat` and/or `func` derivative folders. The reason `/fmriprep` and `/fmriprep/fmriprep/` folders were created is due to the pipeline being run with an older version of fMRIprep (outputs saved to `/fmriprep`) and and a newer version of fMRIprep (outputs saved to `/fmriprep/fmriprep`). 
+
+#### delete_from_list.ipynb
+Script to delete folders based on a list extracted from a TSV. Replace the `base_directory` and `tsv_file` with your desired paths.  
+
+## Scripts for generating quality control viewing pages
+
+#### Located in `/SCanD_project_PNC/code/helper/view_and_create_QC_pages/`
+
+#### `00_QC_fmriprep_view.ipynb`
+Adapted from code shared by Erin, this script displays functional and anatomical fMRIprep SVGs to perform quality control directly within Jupyter Notebook. Major limitation is that SVGs displayed are fixed, not animated. Useful for a quick scan of some anatomical derivatives. However, not ideal for functional SVGs because only a snapshot of the SVG is shown (e.g., only the “before” panel of susceptibility distortion correction images). Images also load quite slowly so the alternative approach using the `extract_svgs` scripts below is recommended.   
+
+#### `01_extract_svgs.sh`
+Creates a directory to store the extracted SVGs from fMRIprep folder. Script needs to be run within the user’s folder containing the results of running `06_extract_to_share.sh` (or alternatively, this script can be copied into the `share` folder). Modify the string suffix to extract different types of `anat` and `func` fMRIprep derivatives such as SDC, EPI to T1, etc.
+
+#### `02_create_html_from_svgs.py`
+To be run **after** creating a directory with extracted SVGs (i.e., run `extract_svgs.sh` first). Generates an HTML page with a specified number of SVGs grouped together per HTML file for QC’ing. Splits SVGs into groups instead of creating a single HTML page so each page can load faster. Sorts SVGs by participant ID so the pages can be viewed in alpha-numerical order. HTML page displays the SVG path and participant ID above each image. Note this file was previously named `extract_sdc_svgs_split.py`.
+
+#### `no_split_html_from_svgs.py`
+An alternate version of `create_html_from_svgs.py` that does **NOT** split SVGs into groups. Instead, a single HTML file with all SVGs is created. This script is not recommended unless you are working with a small number of SVGs (<100). Note this file was previously named `extract_sdc_svgs.py`.
+
