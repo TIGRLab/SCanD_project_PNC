@@ -1,7 +1,7 @@
 import os
 
 # Directory containing the extracted SVG files
-svg_directory = "/Users/clarasun/OneDrive - The University of Western Ontario/SURP/04_PNC/share/fmriprep/extracted_svgs"
+svg_directory = "/Users/*/share/fmriprep/extracted_svgs" # Replace this with local path where extracted SVGs are stored 
 
 # Create an HTML file to display SVGs
 html_file = "animated_svgs.html"
